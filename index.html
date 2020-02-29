@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Терешков Сергей | ВП1 | Геоотзыв</title>
+    <link rel="stylesheet" href="src/main.css" />
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=5998b665-fec1-41cd-bce8-0e33e3f3a059"
+        type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <div id="window_balloon">
+        <div id="window__header">
+            <div id="address"></div>
+            <button id="button__close">+</button>
+        </div>
+        <div id="comments">Отзывов пока нет...</div>
+        <div id="form__wrap">
+            <h3 id="form__header">Ваш отзыв</h3>
+            <input type="text" id="input__name" class="input" placeholder="Ваше имя" />
+            <input type="text" id="input__place" class="input" placeholder="Укажите место" />
+            <textarea name="otziv" id="input__text" class="input" cols="30" rows="5"
+                placeholder="Оставьте отзыв"></textarea>
+            <button id="button__add"><b>Добавить</b></button>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="src/index.js"></script>
+</body>
+
+</html>
