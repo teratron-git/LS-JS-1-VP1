@@ -2,7 +2,6 @@ ymaps.ready(init);
 
 
 let myBalloon = document.querySelector("#window_balloon"),
-    closeButton = document.querySelector("#button__close"),
     addButton = document.querySelector("#button__add"),
     address = document.querySelector("#address"),
     inputName = document.querySelector("#input__name"),
@@ -10,6 +9,7 @@ let myBalloon = document.querySelector("#window_balloon"),
     comments = document.querySelector("#comments"),
     inputText = document.querySelector("#input__text"),
     placemarks = [];
+console.log(myBalloon, addButton, address, inputName, inputPlace, comments, inputText);
 
 function init() {
     let myPlacemark,
@@ -37,21 +37,46 @@ function init() {
     clusterer.add(placemarks);
     myMap.geoObjects.add(clusterer);
 
+    function renderBalloonData(adr = "ПУСТО", comment = "Отзывов пока нет...") {
+        let balloonData = `
+        <div id="window_balloon">
+            <div id="window__header">
+                <div id="address">${adr}</div>
+            </div>
+            <div id="comments">${comment}</div>
+            <div id="form__wrap">
+                <h3 id="form__header">Ваш отзыв</h3>
+                <input type="text" id="input__name" class="input" placeholder="Ваше имя" autocomplete="off">
+                <input type="text" id="input__place" class="input" placeholder="Укажите место" autocomplete="off">
+                <textarea name="otziv" id="input__text" class="input" cols="30" rows="5"
+                    placeholder="Оставьте отзыв" autocomplete="off"></textarea>
+                <button id="button__add"><b>Добавить</b></button>
+            </div>
+        </div>`;
+
+        return balloonData;
+    }
+
+
     // Слушаем клик на карте.
     myMap.events.add("click", e => {
         coords = e.get("coords");
-        comments.innerHTML = "Отзывов пока нет...";
+        //comments.innerHTML = "Отзывов пока нет...";
 
-        // Выводим окно с отзывами и формой.
-        openBalloon();
-        myPlacemark = createPlacemark(coords);
+        // Балун откроется в точке «привязки» балуна — т. е. над меткой.
+        myMap.balloon.open(coords, {
+            //contentHeader: 
+            contentBody: renderBalloonData(),
+            // contentFooter: 'FOOTER',
+            //hintContent: 'HINT'
+        });
+
         getAddress(coords);
     });
 
+
     // Создание метки.
-    function createPlacemark(coords) {
-        return new ymaps.Placemark(coords);
-    }
+
 
     // Определяем адрес по координатам (обратное геокодирование).
     function getAddress(coords) {
@@ -69,7 +94,7 @@ function init() {
                     firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
                 ],
                 // В качестве контента балуна задаем строку с адресом объекта.
-                //balloonContent: firstGeoObject.getAddressLine()
+                balloonContent: firstGeoObject.getAddressLine()
             });
             // Записываем адресс обьекта в хедер окна.
             address.innerText = firstGeoObject.getAddressLine();
@@ -77,9 +102,10 @@ function init() {
     }
 
     addButton.addEventListener("click", () => {
+        debugger;
         if (inputName.value && inputPlace.value && inputText.value) {
             // Получаем адрес отзыва.
-            let addressLink = address.innerText;
+            //let addressLink = address.innerText;
 
             // Формируем дату.
             let date = new Date(),
@@ -95,7 +121,7 @@ function init() {
             let newPlacemark = new ymaps.Placemark(
                 coords, {
                     balloonContentHeader: inputPlace.value,
-                    balloonContentBody: `<a onclick="openBalloonFull()" class="balloon__address_link">${addressLink}</a><br><br>${inputText.value}<br><br>`,
+                    // balloonContentBody: `<a onclick="openBalloonFull()" class="balloon__address_link">${addressLink}</a><br><br>${inputText.value}<br><br>`,
                     balloonContentFooter: currentTime
                 }, {
                     preset: "islands#nightDotIcon",
@@ -152,10 +178,10 @@ function init() {
     });
 }
 
-closeButton.addEventListener("click", () => {
-    myBalloon.style.display = "none";
-    clearInputs();
-});
+// closeButton.addEventListener("click", () => {
+//     myBalloon.style.display = "none";
+//     clearInputs();
+// });
 
 function clearInputs() {
     inputName.value = "";
@@ -168,6 +194,8 @@ function openBalloon() {
     myBalloon.style.top = event.clientY + "px";
     myBalloon.style.left = event.clientX + "px";
     myBalloon.style.display = "block";
+    myPlacemark.balloon.open();
+
 }
 
 // Балун с контентом из placemarks.
@@ -186,4 +214,14 @@ function openBalloonFull() {
     }
     openBalloon();
     allCarousel.click();
+
+    var myBalloon = document.querySelector("#window_balloon"),
+        addButton = document.querySelector("#button__add"),
+        address = document.querySelector("#address"),
+        inputName = document.querySelector("#input__name"),
+        inputPlace = document.querySelector("#input__place"),
+        comments = document.querySelector("#comments"),
+        inputText = document.querySelector("#input__text");
+
+    console.log(myBalloon, addButton, address, inputName, inputPlace, comments, inputText, e.get("contentBody"));
 }
