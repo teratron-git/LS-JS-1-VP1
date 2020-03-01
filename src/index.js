@@ -18,18 +18,6 @@ function init() {
             zoom: 12
         });
 
-
-    if (sessionStorage.data) {
-        console.log('+');
-        dataObj = JSON.parse(sessionStorage.data);
-        console.log(dataObj);
-        for (let i = 0; i < dataObj.length; i++) {
-            let myPoint = createPlacemark(dataObj[i].coords);
-            myMap.geoObjects.add(myPoint);
-        }
-
-    }
-
     // Создание кластера.
     let clusterer = new ymaps.Clusterer({
         preset: "islands#invertedNightClusterIcons",
@@ -48,6 +36,29 @@ function init() {
 
     clusterer.add(placemarks);
     myMap.geoObjects.add(clusterer);
+
+    if (sessionStorage.data) {
+        console.log('+');
+        dataObj = JSON.parse(sessionStorage.data);
+        console.log(dataObj);
+
+        for (let i = 0; i < dataObj.length; i++) {
+            newPlacemark = new ymaps.Placemark(dataObj[i].coords);
+            newPlacemark.commentContent = dataObj[i].comments;
+            newPlacemark.place = dataObj[i].address;
+
+            myMap.geoObjects.add(newPlacemark);
+            clusterer.add(newPlacemark);
+            placemarks.push(newPlacemark);
+        }
+
+        myMap.geoObjects.events.add('click', e => {
+            comments.innerHTML = '';
+            comments.innerHTML = e.get("target").commentContent;
+            address.innerText = e.get("target").place;
+            openBalloon();
+        });
+    }
 
     // Слушаем клик на карте.
     myMap.events.add("click", e => {
@@ -81,10 +92,11 @@ function init() {
                     firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
                 ],
                 // В качестве контента балуна задаем строку с адресом объекта.
-                //balloonContent: firstGeoObject.getAddressLine()
+                balloonContent: firstGeoObject.getAddressLine()
             });
             // Записываем адресс обьекта в хедер окна.
             address.innerText = firstGeoObject.getAddressLine();
+            return address.innerText;
         });
     }
 
@@ -110,7 +122,7 @@ function init() {
                     balloonContentBody: `<a onclick="openBalloonFull()" class="balloon__address_link">${addressLink}</a><br><br>${inputText.value}<br><br>`,
                     balloonContentFooter: currentTime
                 }, {
-                    preset: "islands#nightDotIcon",
+                    //preset: "islands#nightDotIcon",
                     draggable: false,
                     openBalloonOnClick: false // Используем custom balloon.
                 }
@@ -133,16 +145,7 @@ function init() {
 
             // debugger;
             var sData = sessionStorage.data ? JSON.parse(sessionStorage.data) : [];
-            // var sData = [{
-            //     comments: newPlacemark.commentContent,
-            //     address: newPlacemark.place || '',
-            //     coords: coords || ''
-            // }];
-            debugger;
-            let obj;
-
-            debugger;
-            obj = {
+            let obj = {
                 comments: newPlacemark.commentContent,
                 address: newPlacemark.place || '',
                 coords: coords || ''
@@ -186,7 +189,7 @@ function openBalloon() {
 function openBalloonFull() {
     address.innerText = "";
     comments.innerHTML = "";
-    let addressLink = document.querySelector(".balloon__address_link");
+    addressLink = document.querySelector(".balloon__address_link");
     let allCarousel = document.querySelector(".ymaps-2-1-75-balloon__close-button");
 
 
