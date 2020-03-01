@@ -18,6 +18,18 @@ function init() {
             zoom: 12
         });
 
+
+    if (sessionStorage.data) {
+        console.log('+');
+        dataObj = JSON.parse(sessionStorage.data);
+        console.log(dataObj);
+        for (let i = 0; i < dataObj.length; i++) {
+            let myPoint = createPlacemark(dataObj[i].coords);
+            myMap.geoObjects.add(myPoint);
+        }
+
+    }
+
     // Создание кластера.
     let clusterer = new ymaps.Clusterer({
         preset: "islands#invertedNightClusterIcons",
@@ -120,23 +132,23 @@ function init() {
             newPlacemark.place = address.innerText;
 
             // debugger;
-            // var sData = JSON.parse(sessionStorage.data) || [];
+            var sData = sessionStorage.data ? JSON.parse(sessionStorage.data) : [];
             // var sData = [{
             //     comments: newPlacemark.commentContent,
             //     address: newPlacemark.place || '',
             //     coords: coords || ''
             // }];
-            // debugger;
-            // let obj;
+            debugger;
+            let obj;
 
-            // debugger;
-            // obj = {
-            //     comments: newPlacemark.commentContent,
-            //     address: newPlacemark.place || '',
-            //     coords: coords || ''
-            // };
-            // sData.push(obj);
-            // sessionStorage.data = JSON.stringify(sData);
+            debugger;
+            obj = {
+                comments: newPlacemark.commentContent,
+                address: newPlacemark.place || '',
+                coords: coords || ''
+            };
+            sData.push(obj);
+            sessionStorage.data = JSON.stringify(sData);
 
             // Очищаем инпуты.
             clearInputs();
