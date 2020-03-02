@@ -56,6 +56,8 @@ function init() {
             comments.innerHTML = '';
             comments.innerHTML = e.get("target").commentContent;
             address.innerText = e.get("target").place;
+            console.log(e.get("target").geometry._coordinates);
+            coords = e.get("target").geometry._coordinates;
             openBalloon();
         });
     }
