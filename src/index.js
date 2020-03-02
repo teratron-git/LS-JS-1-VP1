@@ -29,7 +29,7 @@ function init() {
         clusterBalloonContentLayout: "cluster#balloonCarousel",
         clusterBalloonPanelMaxMapArea: 0,
         clusterBalloonContentLayoutWidth: 200,
-        clusterBalloonContentLayoutHeight: 250,
+        clusterBalloonContentLayoutHeight: 150,
         clusterBalloonPagerSize: 10,
         clusterBalloonPagerType: "marker",
     });
@@ -56,9 +56,15 @@ function init() {
             comments.innerHTML = '';
             comments.innerHTML = e.get("target").commentContent;
             address.innerText = e.get("target").place;
-            console.log(e.get("target").geometry._coordinates);
+            console.log(e.get("target"));
             coords = e.get("target").geometry._coordinates;
-            openBalloon();
+            //console.log(e.get("target").properties._data.geoObjects[0].commentContent)
+            //console.log(e.get("target").properties._data.geoObjects[0].place)
+            if (e.get("target").options._name !== "cluster") openBalloon();
+            else {
+                //e.get("target").properties._data.geoObjects[0].place = e.get("target").place;
+               // e.get("target").properties._data.geoObjects[0].commentContent = e.get("target").commentContent;
+            }
         });
     }
 
@@ -135,6 +141,9 @@ function init() {
             clusterer.add(newPlacemark);
             placemarks.push(newPlacemark);
 
+            
+
+
             // Обновляем содержимое нашего балуна
             if (comments.innerHTML === "Отзывов пока нет...") comments.innerHTML = "";
             newPlacemark.commentContent =
@@ -199,6 +208,9 @@ function openBalloonFull() {
         if (addressLink.innerText === placemarks[i].place) {
             address.innerText = placemarks[i].place;
             comments.innerHTML += placemarks[i].commentContent;
+            console.log("Мы тут были");
+        } else {
+            console.log("Какая-то лажа");
         }
     }
     openBalloon();
