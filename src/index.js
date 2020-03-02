@@ -9,6 +9,7 @@ let myBalloon = document.querySelector("#window_balloon"),
     inputPlace = document.querySelector("#input__place"),
     comments = document.querySelector("#comments"),
     inputText = document.querySelector("#input__text"),
+    map = document.querySelector("#map");
     placemarks = [];
 
 function init() {
@@ -43,7 +44,11 @@ function init() {
         console.log(dataObj);
 
         for (let i = 0; i < dataObj.length; i++) {
-            newPlacemark = new ymaps.Placemark(dataObj[i].coords);
+            newPlacemark = new ymaps.Placemark(dataObj[i].coords, {
+                balloonContentHeader: inputPlace.value,
+                balloonContentBody: `<a onclick="openBalloonFull()" class="balloon__address_link">${dataObj[i].address}</a>`,
+                balloonContentFooter: dataObj[i].comments
+            });
             newPlacemark.commentContent = dataObj[i].comments;
             newPlacemark.place = dataObj[i].address;
 
@@ -194,6 +199,32 @@ function openBalloon() {
     myBalloon.style.top = event.clientY + "px";
     myBalloon.style.left = event.clientX + "px";
     myBalloon.style.display = "block";
+
+    console.log(myBalloon.clientWidth, myBalloon.clientHeight);
+    console.log(document.body.clientWidth, map.clientHeight)
+
+    let wH = map.clientHeight,
+    wW = map.clientWidth,
+    hD = myBalloon.clientHeight + Number.parseInt(myBalloon.style.top),
+    wD = myBalloon.clientWidth + Number.parseInt(myBalloon.style.left),
+    deltaH = wH - hD - 10,
+    deltaW = wW - wD - 10;
+
+    if (deltaH > 0) {
+        console.log('Hбольше', deltaH);
+    } else {
+        console.log('Hменьше', deltaH);
+        myBalloon.style.top = Number.parseInt(myBalloon.style.top) + deltaH + "px";
+    }
+
+    if (deltaW > 0) {
+        console.log('Wбольше', deltaW);
+    } else {
+        console.log('Wменьше', deltaW);
+        myBalloon.style.left = Number.parseInt(myBalloon.style.left) + deltaW + "px";
+    }
+
+    console.log(myBalloon);
 }
 
 // Балун с контентом из placemarks.
