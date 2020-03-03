@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <title>Терешков Сергей | ВП1 | Геоотзыв</title>
-    <link rel="stylesheet" href="src/main.css" />
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=5998b665-fec1-41cd-bce8-0e33e3f3a059"
-        type="text/javascript"></script>
+    type="text/javascript"></script>
+    <link rel="stylesheet" href="src/main.css" />
 </head>
 
 <body>
@@ -20,10 +20,10 @@
         <div id="comments">Отзывов пока нет...</div>
         <div id="form__wrap">
             <h3 id="form__header">Ваш отзыв</h3>
-            <input type="text" id="input__name" class="input" placeholder="Ваше имя" />
-            <input type="text" id="input__place" class="input" placeholder="Укажите место" />
+            <input type="text" id="input__name" class="input" placeholder="Ваше имя" autocomplete="off">
+            <input type="text" id="input__place" class="input" placeholder="Укажите место" autocomplete="off">
             <textarea name="otziv" id="input__text" class="input" cols="30" rows="5"
-                placeholder="Оставьте отзыв"></textarea>
+                placeholder="Оставьте отзыв" autocomplete="off"></textarea>
             <button id="button__add"><b>Добавить</b></button>
         </div>
     </div>

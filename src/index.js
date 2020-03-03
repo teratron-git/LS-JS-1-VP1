@@ -33,7 +33,7 @@ function init() {
         clusterBalloonContentLayout: 'cluster#balloonCarousel',
         clusterBalloonPanelMaxMapArea: 0,
         clusterBalloonContentLayoutWidth: 200,
-        clusterBalloonContentLayoutHeight: 150,
+        clusterBalloonContentLayoutHeight: 156,
         clusterBalloonPagerSize: 10,
         clusterBalloonPagerType: 'marker',
     });
@@ -46,15 +46,21 @@ function init() {
 
         for (let i = 0; i < dataObj.length; i++) {
             let newPlacemark = new ymaps.Placemark(dataObj[i].coords, {
-                balloonContentHeader: inputPlace.value,
-                balloonContentBody: `<a onclick='openBalloonFull()' class='balloon__address_link'>${dataObj[i].address}</a>`,
-                balloonContentFooter: dataObj[i].comments
+                balloonContentHeader: dataObj[i].place,
+                balloonContentBody: `<a onclick='openBalloonFull()' class='balloon__address_link'>${dataObj[i].address}</a><br><br>${dataObj[i].comments}<br><br>`,
+                balloonContentFooter: `<span class='ligth'>${dataObj[i].currentTime}</span>`
             }, {
                 //preset: 'islands#nightDotIcon',
                 draggable: false,
                 openBalloonOnClick: false // Используем custom balloon.
             });
-            newPlacemark.commentContent = dataObj[i].comments;
+            newPlacemark.commentContent = `
+            <div class='inMyB'>
+                <span><b>${dataObj[i].name}</b></span>
+                <span class='ligth'>${dataObj[i].place}</span>
+                <span class='ligth'>${dataObj[i].currentTime}</span><br>
+                <span >${dataObj[i].comments}</span>
+            </div><br>`;
             newPlacemark.place = dataObj[i].address;
 
             myMap.geoObjects.add(newPlacemark);
@@ -100,14 +106,9 @@ function init() {
             myBalloon.style.display = 'none';
         }
 
-        myPlacemark = createPlacemark(coords);
+        myPlacemark = new ymaps.Placemark(coords);
         getAddress(coords);
     });
-
-    // Создание метки.
-    function createPlacemark(coords) {
-        return new ymaps.Placemark(coords);
-    }
 
     // Определяем адрес по координатам (обратное геокодирование).
     function getAddress(coords) {
@@ -153,7 +154,7 @@ function init() {
                 coords, {
                     balloonContentHeader: inputPlace.value,
                     balloonContentBody: `<a onclick='openBalloonFull()' class='balloon__address_link'>${addressLink}</a><br><br>${inputText.value}<br><br>`,
-                    balloonContentFooter: currentTime
+                    balloonContentFooter: `<span class='ligth'>${currentTime}</span>`
                 }, {
                     draggable: false,
                     openBalloonOnClick: false // Используем custom balloon.
@@ -168,18 +169,24 @@ function init() {
             // Обновляем содержимое нашего балуна
             if (comments.innerHTML === 'Отзывов пока нет...') comments.innerHTML = '';
             newPlacemark.commentContent =
-                `<div><span><b>${inputName.value}</b></span>
-                 <span class='ligth'>${inputPlace.value}</span>
-                <span class='ligth'>${currentTime}:</span><br>
-                 <span>${inputText.value}</span></div><br>`;
+                `<div class='inMyB'>
+                    <span><b>${inputName.value}</b></span>
+                    <span class='ligth'>${inputPlace.value}</span>
+                    <span class='ligth'>${currentTime}</span><br>
+                    <span>${inputText.value}</span>
+                </div><br>`;
             comments.innerHTML += newPlacemark.commentContent;
             newPlacemark.place = address.innerText;
-
+            
+            //Записываем данные
             let sData = sessionStorage.data ? JSON.parse(sessionStorage.data) : [];
             let obj = {
-                comments: newPlacemark.commentContent,
+                name: inputName.value,
+                place: inputPlace.value,
+                comments: inputText.value,
                 address: newPlacemark.place || '',
-                coords: coords || ''
+                coords: coords || '',
+                currentTime: currentTime
             };
             sData.push(obj);
             sessionStorage.data = JSON.stringify(sData);
