@@ -12,7 +12,8 @@ let myBalloon = document.querySelector('#window_balloon'),
     placemarks = [],
     allCarousel = document.querySelector('.ymaps-2-1-75-balloon__close'),
     coords,
-    newPlacemark;
+    newPlacemark,
+    addressLink;
 
 function init() {
     let myPlacemark,
@@ -79,6 +80,14 @@ function init() {
                 }
             }
         });
+    } else {
+        myMap.geoObjects.events.add('click', e => {
+            if (e.get('target').options._name == 'cluster') {
+                if (myBalloon.style.display == 'block') {
+                    myBalloon.style.display = 'none';
+                }
+            }
+        });
     }
 
     // Слушаем клик на карте.
@@ -87,6 +96,10 @@ function init() {
 
         comments.innerHTML = 'Отзывов пока нет...';
         openBalloon();
+        if (document.querySelector('.ymaps-2-1-75-balloon') != null) {
+            myBalloon.style.display = 'none';
+        }
+
         myPlacemark = createPlacemark(coords);
         getAddress(coords);
     });
@@ -123,7 +136,7 @@ function init() {
     addButton.addEventListener('click', () => {
         if (inputName.value && inputPlace.value && inputText.value) {
             // Получаем адрес отзыва.
-            let addressLink = address.innerText;
+            addressLink = address.innerText;
 
             // Формируем дату.
             let date = new Date(),
@@ -221,7 +234,6 @@ function openBalloonFull() {
     address.innerText = '';
     comments.innerHTML = '';
     addressLink = document.querySelector('.balloon__address_link');
-
 
     for (let i = 0; i < placemarks.length; i++) {
         if (addressLink.innerText === placemarks[i].place) {
