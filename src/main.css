@@ -1,0 +1,137 @@
+* {
+    outline: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#map {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+}
+
+#window_balloon {
+    background: white;
+    width: 380px;
+    height: 528px;
+    border-radius: 10px;
+    display: none;
+    z-index: 1;
+    position: absolute;
+    font-family: Helvetica, sans-serif;
+    transition: 0.3s;
+}
+
+#window__header {
+    height: 45px;
+    background-color: #fa7d4d;
+    color: white;
+    border-radius: 10px 10px 0 0;
+    font-size: 10px;
+    position: relative;
+}
+
+#address {
+    display: inline-block;
+    margin-right: 35px!important;
+    font-weight: bold;
+    padding-left: 25px;
+    margin-right: -25px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#address::before {
+    content: '';
+    background: url(icon.png);
+    background-size: auto;
+    background-size: 18px 18px;
+    width: 18px;
+    height: 18px;
+    left: 6px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    
+}
+
+#button__close {
+    float: right;
+    border-radius: 50%;
+    margin: 0 5px;
+    transform: rotate(45deg);
+    background: none;
+    color: white;
+    border: 0;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#comments {
+    margin: 5px 10px;
+    width: 95%;
+    height: 150px;
+    overflow-y: scroll;
+    font-size: 15px;
+}
+
+#form__header {
+    color: #fa7d4d;
+    margin: 0 0 0 10px;
+}
+
+.input {
+    border: 1px solid grey;
+    width: 352px;
+    height: 33px;
+    margin: 5px 10px;
+    padding: 0 5px 0 5px;
+    border-radius: 10px;
+}
+
+#input__text {
+    width: 352px;
+    height: 130px;
+    border-radius: 10px;
+    font-family: Helvetica, sans-serif;
+}
+
+#button__add {
+    float: right;
+    height: 30px;
+    width: 90px;
+    margin: 7px;
+    border-radius: 5px;
+    background-color: #fa7d4d;
+    color: white;
+    border: 0 solid white;
+    cursor: pointer;
+}
+.inMyB > .ligth {
+    color: #88837c;
+    display: inline;
+}
+
+.ymaps-2-1-75-b-cluster-carousel__footer > .ligth {
+    color: #88837c;
+    display: block;
+    text-align: right;
+}
+
+.ymaps-2-1-75-b-cluster-content__body {
+    min-height: 112px;
+    margin-bottom: 0!important;
+}
